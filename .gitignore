@@ -20,3 +20,17 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+.classpath
+.idea/
+.project
+META-INF/
+build.properties
+hn-mvc.iml
+readme.txt
+template.mf
+
+hackernews/.gitignore
+hackernews/.mvn/
+hackernews/mvnw
+hackernews/mvnw.cmd
