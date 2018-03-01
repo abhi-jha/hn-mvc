@@ -34,3 +34,5 @@ hackernews/.gitignore
 hackernews/.mvn/
 hackernews/mvnw
 hackernews/mvnw.cmd
+hackernews/.settings/*
+hackernews/target/maven-status/*
