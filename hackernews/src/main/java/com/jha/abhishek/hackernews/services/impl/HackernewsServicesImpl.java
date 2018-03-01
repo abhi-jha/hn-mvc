@@ -1,6 +1,8 @@
 package com.jha.abhishek.hackernews.services.impl;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jha.abhishek.hackernews.domains.HackernewsDomain;
 import com.jha.abhishek.hackernews.entities.HackernewsStories;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
@@ -29,38 +32,84 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<HackernewsStories> findById(Long id)throws NonCriticalException,CriticalException {
+	public Optional<HackernewsDomain> findById(Long id) throws NonCriticalException, CriticalException {
 
-//		if(id<1) {
-//			throw new NonCriticalException("invalid id");
-//		}
-		Optional<HackernewsStories> hack;
-		LOG.info("finding by : ", id);
-		try {
-			hack = repository.findById(id);
-		}
-		catch(Exception e) {
-			LOG.info("hereglbnlkbgnglm");
-			throw new NonCriticalException("invalid id");
-		}
-		
-		LOG.info("returning story : ", hack.get().toString());
+		Optional<HackernewsStories> story = repository.findById(id);
 
-		return hack;
+		HackernewsDomain domain = new HackernewsDomain();
+
+		if (story.isPresent()) {
+			setDomainvalues(domain, story);
+		} else {
+			return Optional.empty();
+		}
+
+		return Optional.of(domain);
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsStories>> findByTime(Timestamp time) {
+	public Optional<List<HackernewsDomain>> findByTime(Timestamp time) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsStories>> findByScore(Long score) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<List<HackernewsDomain>> findByScore(Long score) {
+
+		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
+
+		List<HackernewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			HackernewsDomain domain = new HackernewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
+	}
+
+	@Override
+	public Optional<List<HackernewsDomain>> findByTitleContaining(String matchingText) {
+
+		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
+
+		List<HackernewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			HackernewsDomain domain = new HackernewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
+	}
+
+	@Override
+	public Optional<List<HackernewsDomain>> findByTitleContainingAndScoreGreaterThan(String matchingText, Long score) {
+		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
+				score);
+
+		List<HackernewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			HackernewsDomain domain = new HackernewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
+	}
+
+	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
+		domain.setId(story.get().getId());
+		domain.setScore(story.get().getScore());
+		Time t= new Time(story.get().getTime().getTime());
+		domain.setTime(t);
+		domain.setTitle(story.get().getTitle());
+		domain.setUrl(story.get().getUrl());
 	}
 
 }

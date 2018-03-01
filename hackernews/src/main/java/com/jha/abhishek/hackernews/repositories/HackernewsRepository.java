@@ -9,5 +9,11 @@ import com.jha.abhishek.hackernews.entities.HackernewsStories;
 public interface HackernewsRepository extends Repository<HackernewsStories, Long> {
 	
 	Optional<HackernewsStories> findById(Long id);
+	
+	Optional<List<HackernewsStories>> findByScoreGreaterThan(Long score);
+	
+	Optional<List<HackernewsStories>> findByTitleContaining(String matchingText);
+	
+	Optional<List<HackernewsStories>> findByTitleContainingAndScoreGreaterThan(String matchingText,Long score);
 
 }
