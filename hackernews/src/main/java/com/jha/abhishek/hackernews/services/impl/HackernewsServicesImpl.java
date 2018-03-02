@@ -86,6 +86,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
+		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
 		//Time t= new Time(story.get().getTime().getTime());
 		//domain.setTime(t);
