@@ -10,8 +10,6 @@ import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 
 public interface HackernewsServices {
 	
-	public Optional<HackernewsDomain> findById(Long id)throws NonCriticalException, CriticalException;
-	
 	public Optional<List<HackernewsDomain>> findByTime(Timestamp time)throws NonCriticalException, CriticalException;
 	
 	public Optional<List<HackernewsDomain>> findByScore(Long score)throws NonCriticalException, CriticalException;

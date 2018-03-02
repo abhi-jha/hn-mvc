@@ -12,5 +12,4 @@ public class HackernewsApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

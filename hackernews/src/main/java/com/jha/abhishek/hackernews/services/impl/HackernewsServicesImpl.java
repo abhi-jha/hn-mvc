@@ -31,23 +31,6 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<HackernewsDomain> findById(Long id) throws NonCriticalException, CriticalException {
-
-		Optional<HackernewsStories> story = repository.findById(id);
-
-		HackernewsDomain domain = new HackernewsDomain();
-
-		if (story.isPresent()) {
-			setDomainvalues(domain, story);
-		} else {
-			return Optional.empty();
-		}
-
-		return Optional.of(domain);
-	}
-
-	@Transactional
-	@Override
 	public Optional<List<HackernewsDomain>> findByTime(Timestamp time)throws NonCriticalException, CriticalException {
 		// TODO Auto-generated method stub
 		return null;
@@ -103,7 +86,6 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
-		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
 		//Time t= new Time(story.get().getTime().getTime());
 		//domain.setTime(t);

@@ -26,13 +26,6 @@ public class HackerNewsControllers {
 	@Autowired
 	HackernewsServices hack;
 
-	@ApiOperation(value = "Get a story corresponding to the id", response = HackernewsDomain.class)
-	@RequestMapping(value = "/id/{id}", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryForId(@PathVariable("id") Long id) throws NonCriticalException, CriticalException {
-		Optional<HackernewsDomain> story = hack.findById(id);
-		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
-	}
-
 	@ApiOperation(value = "Get stories corresponding to floor score", response = HackernewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryForScore(@PathVariable("score") Long score)
