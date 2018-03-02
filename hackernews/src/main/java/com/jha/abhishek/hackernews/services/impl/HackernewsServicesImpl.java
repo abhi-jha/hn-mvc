@@ -1,6 +1,5 @@
 package com.jha.abhishek.hackernews.services.impl;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +48,14 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> findByTime(Timestamp time) {
+	public Optional<List<HackernewsDomain>> findByTime(Timestamp time)throws NonCriticalException, CriticalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> findByScore(Long score) {
+	public Optional<List<HackernewsDomain>> findByScore(Long score) throws NonCriticalException, CriticalException{
 
 		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
 
@@ -72,7 +71,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> findByTitleContaining(String matchingText) {
+	public Optional<List<HackernewsDomain>> findByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
 
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
 
@@ -88,7 +87,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> findByTitleContainingAndScoreGreaterThan(String matchingText, Long score) {
+	public Optional<List<HackernewsDomain>> findByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
 				score);
 
@@ -106,8 +105,9 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
 		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
-		Time t= new Time(story.get().getTime().getTime());
-		domain.setTime(t);
+		//Time t= new Time(story.get().getTime().getTime());
+		//domain.setTime(t);
+		domain.setTime(story.get().getTime().getTime());
 		domain.setTitle(story.get().getTitle());
 		domain.setUrl(story.get().getUrl());
 	}
