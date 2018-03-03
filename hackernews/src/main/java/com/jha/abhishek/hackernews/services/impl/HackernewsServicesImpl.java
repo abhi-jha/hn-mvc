@@ -31,14 +31,14 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> findByTime(Timestamp time)throws NonCriticalException, CriticalException {
+	public Optional<List<HackernewsDomain>> getByTime(Timestamp time)throws NonCriticalException, CriticalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> findByScore(Long score) throws NonCriticalException, CriticalException{
+	public Optional<List<HackernewsDomain>> getByScore(Long score) throws NonCriticalException, CriticalException{
 
 		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
 
@@ -54,7 +54,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> findByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
+	public Optional<List<HackernewsDomain>> getByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
 
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
 
@@ -70,7 +70,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> findByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
+	public Optional<List<HackernewsDomain>> getByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
 				score);
 

@@ -30,7 +30,7 @@ public class HackerNewsControllers {
 	@RequestMapping(value = "/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryForScore(@PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
-		Optional<List<HackernewsDomain>> story = hack.findByScore(score);
+		Optional<List<HackernewsDomain>> story = hack.getByScore(score);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
@@ -38,7 +38,7 @@ public class HackerNewsControllers {
 	@RequestMapping(value = "/match/{matchingText}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryforMatchingText(@PathVariable("matchingText") String matchingText)
 			throws NonCriticalException, CriticalException {
-		Optional<List<HackernewsDomain>> story = hack.findByTitleContaining(matchingText);
+		Optional<List<HackernewsDomain>> story = hack.getByTitleContaining(matchingText);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
@@ -47,7 +47,7 @@ public class HackerNewsControllers {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryforMatchingTextAndScoreGreater(@PathVariable("matchingText") String matchingText,
 			@PathVariable("score") Long score) throws NonCriticalException, CriticalException {
-		Optional<List<HackernewsDomain>> story = hack.findByTitleContainingAndScoreGreaterThan(matchingText, score);
+		Optional<List<HackernewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThan(matchingText, score);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 }
