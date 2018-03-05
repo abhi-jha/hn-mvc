@@ -15,5 +15,7 @@ public interface HackernewsRepository extends Repository<HackernewsStories, Long
 	Optional<List<HackernewsStories>> findByTitleContaining(String matchingText);
 	
 	Optional<List<HackernewsStories>> findByTitleContainingAndScoreGreaterThan(String matchingText,Long score);
+	
+	Optional<List<HackernewsStories>> findByBy(String by);
 
 }

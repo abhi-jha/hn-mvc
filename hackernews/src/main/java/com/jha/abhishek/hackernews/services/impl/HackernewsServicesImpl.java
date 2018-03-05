@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jha.abhishek.hackernews.domains.HackernewsDomain;
+import com.jha.abhishek.hackernews.domains.HackernewsDomainByUser;
 import com.jha.abhishek.hackernews.entities.HackernewsStories;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
@@ -85,11 +86,26 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		return Optional.of(domains);
 	}
 
+	@Override
+	public Optional<List<HackernewsDomainByUser>> getByBy(String by) throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsStories>> stories = repository.findByBy(by);
+
+		List<HackernewsDomainByUser> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			HackernewsDomainByUser domain = new HackernewsDomainByUser();
+			setDomainvalues(domain, Optional.of(story));
+			domain.setBy(story.getBy());
+			domains.add(domain);
+			
+		}
+		return Optional.of(domains);
+	}
+	
 	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
 		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
-		//Time t= new Time(story.get().getTime().getTime());
-		//domain.setTime(t);
 		domain.setTime(story.get().getTime().getTime());
 		domain.setTitle(story.get().getTitle());
 		domain.setUrl(story.get().getUrl());

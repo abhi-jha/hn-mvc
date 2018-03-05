@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jha.abhishek.hackernews.domains.HackernewsDomain;
+import com.jha.abhishek.hackernews.domains.HackernewsDomainByUser;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
@@ -35,7 +36,7 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Get stories where they all contain the string", response = HackernewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/match/{matchingText}", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/match/text/{matchingText}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryforMatchingText(@PathVariable("matchingText") String matchingText)
 			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsDomain>> story = hack.getByTitleContaining(matchingText);
@@ -43,11 +44,19 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Get stories where they all contain a string and floor score", response = HackernewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/match/{matchingText}/score/{score}", produces = {
+	@RequestMapping(value = "/match/text/{matchingText}/score/{score}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryforMatchingTextAndScoreGreater(@PathVariable("matchingText") String matchingText,
 			@PathVariable("score") Long score) throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThan(matchingText, score);
+		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Get stories by the same user", response = HackernewsDomainByUser.class, responseContainer = "List")
+	@RequestMapping(value = "/match/user/{userId}", produces = {
+			"application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<?> getStoryByUser(@PathVariable("userId") String userId) throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsDomainByUser>> story = hack.getByBy(userId);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 }
