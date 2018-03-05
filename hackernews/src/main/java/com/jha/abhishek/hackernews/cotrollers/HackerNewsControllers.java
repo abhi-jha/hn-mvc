@@ -27,7 +27,7 @@ public class HackerNewsControllers {
 	@Autowired
 	HackernewsServices hack;
 
-	@ApiOperation(value = "Get stories corresponding to floor score", response = HackernewsDomain.class, responseContainer = "List")
+	@ApiOperation(value = "Get stories corresponding to minimum score", response = HackernewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryForScore(@PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
@@ -43,7 +43,7 @@ public class HackerNewsControllers {
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Get stories where they all contain a string and floor score", response = HackernewsDomain.class, responseContainer = "List")
+	@ApiOperation(value = "Get stories where they all contain a string and minimum score", response = HackernewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/match/text/{matchingText}/score/{score}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryforMatchingTextAndScoreGreater(@PathVariable("matchingText") String matchingText,
