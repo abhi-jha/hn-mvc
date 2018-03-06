@@ -30,6 +30,8 @@ hn-mvc.iml
 readme.txt
 template.mf
 
+*.iml
+
 hackernews/.gitignore
 hackernews/.mvn/
 hackernews/mvnw
