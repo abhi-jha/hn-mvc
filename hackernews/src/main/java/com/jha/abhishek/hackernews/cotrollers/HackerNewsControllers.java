@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.jha.abhishek.hackernews.domains.HackernewsDomain;
 import com.jha.abhishek.hackernews.domains.HackernewsDomainByUser;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
@@ -51,11 +50,11 @@ public class HackerNewsControllers {
 		Optional<List<HackernewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThan(matchingText, score);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Get stories by the same user", response = HackernewsDomainByUser.class, responseContainer = "List")
-	@RequestMapping(value = "/match/user/{userId}", produces = {
-			"application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryByUser(@PathVariable("userId") String userId) throws NonCriticalException, CriticalException {
+	@RequestMapping(value = "/match/user/{userId}", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<?> getStoryByUser(@PathVariable("userId") String userId)
+			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsDomainByUser>> story = hack.getByBy(userId);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
