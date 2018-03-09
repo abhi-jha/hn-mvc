@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jha.abhishek.hackernews.domains.HackernewsDomain;
-import com.jha.abhishek.hackernews.domains.HackernewsDomainByUser;
+import com.jha.abhishek.hackernews.domains.NewsDomain;
+import com.jha.abhishek.hackernews.domains.NewsDomainByUser;
 import com.jha.abhishek.hackernews.entities.HackernewsStories;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
@@ -32,22 +32,22 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> getByTime(Timestamp time)throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomain>> getByTime(Timestamp time)throws NonCriticalException, CriticalException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<HackernewsDomain>> getByScore(Long score) throws NonCriticalException, CriticalException{
+	public Optional<List<NewsDomain>> getByScore(Long score) throws NonCriticalException, CriticalException{
 
 		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
 
-		List<HackernewsDomain> domains = new ArrayList<>();
+		List<NewsDomain> domains = new ArrayList<>();
 
 		for (int i = 0; i < stories.get().size(); i++) {
 			HackernewsStories story = stories.get().get(i);
-			HackernewsDomain domain = new HackernewsDomain();
+			NewsDomain domain = new NewsDomain();
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
@@ -55,15 +55,15 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> getByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomain>> getByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
 
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
 
-		List<HackernewsDomain> domains = new ArrayList<>();
+		List<NewsDomain> domains = new ArrayList<>();
 
 		for (int i = 0; i < stories.get().size(); i++) {
 			HackernewsStories story = stories.get().get(i);
-			HackernewsDomain domain = new HackernewsDomain();
+			NewsDomain domain = new NewsDomain();
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
@@ -71,15 +71,15 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomain>> getByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomain>> getByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
 				score);
 
-		List<HackernewsDomain> domains = new ArrayList<>();
+		List<NewsDomain> domains = new ArrayList<>();
 
 		for (int i = 0; i < stories.get().size(); i++) {
 			HackernewsStories story = stories.get().get(i);
-			HackernewsDomain domain = new HackernewsDomain();
+			NewsDomain domain = new NewsDomain();
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
@@ -87,14 +87,14 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<HackernewsDomainByUser>> getByBy(String by) throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomainByUser>> getByBy(String by) throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByBy(by);
 
-		List<HackernewsDomainByUser> domains = new ArrayList<>();
+		List<NewsDomainByUser> domains = new ArrayList<>();
 
 		for (int i = 0; i < stories.get().size(); i++) {
 			HackernewsStories story = stories.get().get(i);
-			HackernewsDomainByUser domain = new HackernewsDomainByUser();
+			NewsDomainByUser domain = new NewsDomainByUser();
 			setDomainvalues(domain, Optional.of(story));
 			domain.setBy(story.getBy());
 			domains.add(domain);
@@ -103,7 +103,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		return Optional.of(domains);
 	}
 	
-	public void setDomainvalues(HackernewsDomain domain, Optional<HackernewsStories> story) {
+	public void setDomainvalues(NewsDomain domain, Optional<HackernewsStories> story) {
 		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
 		domain.setTime(story.get().getTime().getTime());

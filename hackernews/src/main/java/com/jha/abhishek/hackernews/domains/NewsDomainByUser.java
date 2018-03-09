@@ -1,6 +1,6 @@
 package com.jha.abhishek.hackernews.domains;
 
-public class HackernewsDomainByUser extends HackernewsDomain {
+public class NewsDomainByUser extends NewsDomain {
 
 	String by;
 

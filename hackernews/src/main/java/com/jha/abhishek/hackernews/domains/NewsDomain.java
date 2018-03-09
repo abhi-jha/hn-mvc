@@ -3,7 +3,7 @@ package com.jha.abhishek.hackernews.domains;
 import java.text.SimpleDateFormat;
 import java.util.Date;;
 
-public class HackernewsDomain {
+public class NewsDomain {
 
 	Long id;
 	String title;
@@ -11,11 +11,11 @@ public class HackernewsDomain {
 	String time;
 	Long score;
 
-	public HackernewsDomain() {
+	public NewsDomain() {
 		super();
 	}
 
-	public HackernewsDomain(Long id, String title, String url, String time, Long score) {
+	public NewsDomain(Long id, String title, String url, String time, Long score) {
 		super();
 		this.id = id;
 		this.title = title;
