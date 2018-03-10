@@ -32,14 +32,24 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Transactional
 	@Override
-	public Optional<List<NewsDomain>> getByTime(Timestamp time)throws NonCriticalException, CriticalException {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<List<NewsDomain>> getByTimeBetween(Timestamp start, Timestamp end)
+			throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsStories>> stories = repository.findByTimeBetween(start, end);
+
+		List<NewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			NewsDomain domain = new NewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
 	}
 
 	@Transactional
 	@Override
-	public Optional<List<NewsDomain>> getByScore(Long score) throws NonCriticalException, CriticalException{
+	public Optional<List<NewsDomain>> getByScore(Long score) throws NonCriticalException, CriticalException {
 
 		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
 
@@ -55,7 +65,8 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<NewsDomain>> getByTitleContaining(String matchingText)throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomain>> getByTitleContaining(String matchingText)
+			throws NonCriticalException, CriticalException {
 
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
 
@@ -71,7 +82,8 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Optional<List<NewsDomain>> getByTitleContainingAndScoreGreaterThan(String matchingText, Long score)throws NonCriticalException, CriticalException {
+	public Optional<List<NewsDomain>> getByTitleContainingAndScoreGreaterThan(String matchingText, Long score)
+			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
 				score);
 
@@ -98,11 +110,44 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			setDomainvalues(domain, Optional.of(story));
 			domain.setBy(story.getBy());
 			domains.add(domain);
-			
+
 		}
 		return Optional.of(domains);
 	}
-	
+
+	@Override
+	public Optional<List<NewsDomain>> getByTimeBetweenAndScoreGreaterThan(Timestamp start, Timestamp end, Long score)
+			throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsStories>> stories = repository.findByTimeBetweenAndScoreGreaterThan(start, end, score);
+
+		List<NewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			NewsDomain domain = new NewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
+	}
+
+	@Override
+	public Optional<List<NewsDomain>> getByTitleContainingAndScoreGreaterThanAndTimeBetween(String matchingText,
+			Long score, Timestamp start, Timestamp end) throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsStories>> stories = repository
+				.findByTitleContainingAndScoreGreaterThanAndTimeBetween(matchingText, score, start, end);
+
+		List<NewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			NewsDomain domain = new NewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+		return Optional.of(domains);
+	}
+
 	public void setDomainvalues(NewsDomain domain, Optional<HackernewsStories> story) {
 		domain.setId(story.get().getId());
 		domain.setScore(story.get().getScore());
