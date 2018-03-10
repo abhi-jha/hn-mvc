@@ -105,7 +105,7 @@ public class HackerNewsControllers {
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Stories for a date(ddMMyyyy), above a score and matching text", response = NewsDomain.class, responseContainer = "List")
+	@ApiOperation(value = "Stories for a date(ddMMyyyy), above a score and matching string", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{time}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryByADayAndMinimumScoreAndmatchingText(
@@ -117,7 +117,7 @@ public class HackerNewsControllers {
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Stories between dates(ddMMyyyy), above a score and matching text", response = NewsDomain.class, responseContainer = "List")
+	@ApiOperation(value = "Stories between dates(ddMMyyyy), above a score and a matching string", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{start}/{end}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryBetweenTimeAndMinimumScoreAndMatchingText(
