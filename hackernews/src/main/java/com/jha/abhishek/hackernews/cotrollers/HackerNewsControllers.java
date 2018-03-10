@@ -24,7 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Tech news", description = "Links for major tech news", tags = { "REST API Links from major tech news" })
+@Api(value = "Tech news", description = "Links Aggregation for tech news and a lot more", tags = { "REST API Links" })
 @RequestMapping("api/v1/")
 public class HackerNewsControllers {
 	@Autowired
