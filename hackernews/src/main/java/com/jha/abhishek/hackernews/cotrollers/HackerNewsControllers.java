@@ -72,9 +72,20 @@ public class HackerNewsControllers {
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Get stories between a time(ddMMyyyy) period", response = NewsDomain.class, responseContainer = "List")
+	@RequestMapping(value = "/time/{start}/{end}", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<?> getStoryBetweenATimePeriod(
+			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
+			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end)
+			throws NonCriticalException, CriticalException {
+		Optional<List<NewsDomain>> story = hack.getByTimeBetween(new Timestamp(start.getTime()),
+				new Timestamp(end.getTime()));
+		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Get stories for a day(ddMMyyyy) and minimum score", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{time}/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryByADayAndminimumScore(
+	public ResponseEntity<?> getStoryByADayAndMinimumScore(
 			@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(date.getTime()),
@@ -82,10 +93,22 @@ public class HackerNewsControllers {
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Get stories between a time(ddMMyyyy) period and minimum score", response = NewsDomain.class, responseContainer = "List")
+	@RequestMapping(value = "/time/{start}/{end}/score/{score}", produces = {
+			"application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<?> getStoryBetweenATimePeriodAndMinimumScore(
+			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
+			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end, @PathVariable("score") Long score)
+			throws NonCriticalException, CriticalException {
+		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(start.getTime()),
+				new Timestamp(end.getTime()), score);
+		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "Get stories for a day(ddMMyyyy), minimum score and a matching text", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{time}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryByADayAndminimumScoreAndmatchingText(
+	public ResponseEntity<?> getStoryByADayAndMinimumScoreAndmatchingText(
 			@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score,
 			@PathVariable("matchingText") String matchingText) throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThanAndTimeBetween(matchingText,
@@ -97,7 +120,7 @@ public class HackerNewsControllers {
 	@ApiOperation(value = "Get stories for between(ddMMyyyy), minimum score and a matching text", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{start}/{end}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryBetweenTimeAndminimumScoreAndmatchingText(
+	public ResponseEntity<?> getStoryBetweenTimeAndMinimumScoreAndMatchingText(
 			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
 			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end, @PathVariable("score") Long score,
 			@PathVariable("matchingText") String matchingText) throws NonCriticalException, CriticalException {
