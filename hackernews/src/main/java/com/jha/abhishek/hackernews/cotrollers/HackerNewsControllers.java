@@ -24,7 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Tech news", description = "Links Aggregation for tech news and a lot more", tags = { "REST API Links" })
+@Api(value = "Tech news", description = "Tech news link aggregation for better querying", tags = { "Web API Links" })
 @RequestMapping("api/v1/")
 public class HackerNewsControllers {
 	@Autowired
@@ -85,7 +85,7 @@ public class HackerNewsControllers {
 
 	@ApiOperation(value = "Get stories for a day(ddMMyyyy) and minimum score", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{time}/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryByADayAndMinimumScore(
+	public ResponseEntity<?> getStoryByADayAndMinimumScoreWithStartDateSupplied(
 			@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(date.getTime()),
@@ -96,7 +96,7 @@ public class HackerNewsControllers {
 	@ApiOperation(value = "Get stories between a time(ddMMyyyy) period and minimum score", response = NewsDomain.class, responseContainer = "List")
 	@RequestMapping(value = "/time/{start}/{end}/score/{score}", produces = {
 			"application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryBetweenATimePeriodAndMinimumScore(
+	public ResponseEntity<?> getStoryBetweenATimePeriodAndMinimumScoreWithBothDateSupplied(
 			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
 			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end, @PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {

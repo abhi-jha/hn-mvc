@@ -26,7 +26,7 @@ public class SwaggerConfig
 
     private ApiInfo apiInfo()
     {
-        ApiInfo apiInfo = new ApiInfo( "Tech REST APIs", "API docs", "1.0",
+        ApiInfo apiInfo = new ApiInfo( "Tech Web APIs", "API docs", "1.0",
             "Terms and Condition", new Contact( "Abhishek Jha", "", "abhishekjha@protonmail.com" ), "", "" );
         return apiInfo;
     }
