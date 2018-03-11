@@ -64,8 +64,8 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Stories for a date(ddMMyyyy)", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{time}", produces = { "application/json" }, method = RequestMethod.GET)
-	public ResponseEntity<?> getStoryByADay(@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date)
+	@RequestMapping(value = "/date/{date}", produces = { "application/json" }, method = RequestMethod.GET)
+	public ResponseEntity<?> getStoryByADay(@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date)
 			throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTimeBetween(new Timestamp(date.getTime()),
 				new Timestamp(new Date(date.getTime() + 3600 * 1000 * 24 - 1000).getTime()));
@@ -73,20 +73,20 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Stories between dates(ddMMyyyy)", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{start}/{end}", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/date/{start}/{end}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryBetweenATimePeriod(
-			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
-			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end)
+			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date startDate,
+			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date endDate)
 			throws NonCriticalException, CriticalException {
-		Optional<List<NewsDomain>> story = hack.getByTimeBetween(new Timestamp(start.getTime()),
-				new Timestamp(end.getTime()));
+		Optional<List<NewsDomain>> story = hack.getByTimeBetween(new Timestamp(startDate.getTime()),
+				new Timestamp(endDate.getTime()));
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Stories for a date(ddMMyyyy) and above a score", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{time}/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/date/{date}/score/{score}", produces = { "application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryByADayAndMinimumScore(
-			@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score)
+			@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(date.getTime()),
 				new Timestamp(new Date(date.getTime() + 3600 * 1000 * 24 - 1000).getTime()), score);
@@ -94,22 +94,22 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Stories between dates(ddMMyyyy) and above a score", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{start}/{end}/score/{score}", produces = {
+	@RequestMapping(value = "/date/{start}/{end}/score/{score}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryBetweenATimePeriodAndMinimumScore(
-			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
-			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end, @PathVariable("score") Long score)
+			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date startDate,
+			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date endDate, @PathVariable("score") Long score)
 			throws NonCriticalException, CriticalException {
-		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(start.getTime()),
-				new Timestamp(end.getTime()), score);
+		Optional<List<NewsDomain>> story = hack.getByTimeBetweenAndScoreGreaterThan(new Timestamp(startDate.getTime()),
+				new Timestamp(endDate.getTime()), score);
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Stories for a date(ddMMyyyy), above a score and matching string", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{time}/score/{score}/match/{matchingText}", produces = {
+	@RequestMapping(value = "/date/{date}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryByADayAndMinimumScoreAndmatchingText(
-			@PathVariable("time") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score,
+			@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score,
 			@PathVariable("matchingText") String matchingText) throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThanAndTimeBetween(matchingText,
 				score, new Timestamp(date.getTime()),
@@ -118,14 +118,14 @@ public class HackerNewsControllers {
 	}
 
 	@ApiOperation(value = "Stories between dates(ddMMyyyy), above a score and a matching string", response = NewsDomain.class, responseContainer = "List")
-	@RequestMapping(value = "/time/{start}/{end}/score/{score}/match/{matchingText}", produces = {
+	@RequestMapping(value = "/date/{start}/{end}/score/{score}/match/{matchingText}", produces = {
 			"application/json" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getStoryBetweenTimeAndMinimumScoreAndMatchingText(
-			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date start,
-			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date end, @PathVariable("score") Long score,
+			@PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date startDate,
+			@PathVariable("end") @DateTimeFormat(pattern = "ddMMyyyy") Date endDate, @PathVariable("score") Long score,
 			@PathVariable("matchingText") String matchingText) throws NonCriticalException, CriticalException {
 		Optional<List<NewsDomain>> story = hack.getByTitleContainingAndScoreGreaterThanAndTimeBetween(matchingText,
-				score, new Timestamp(start.getTime()), new Timestamp(end.getTime()));
+				score, new Timestamp(startDate.getTime()), new Timestamp(endDate.getTime()));
 		return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
 	}
 }
