@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +146,23 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
+		return Optional.of(domains);
+	}
+
+	@Override
+	public Optional<List<NewsDomain>> getByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String title)
+			throws NonCriticalException, CriticalException {
+		Optional<List<HackernewsStories>> stories = repository.findByTimeBetweenAndTitleContaining(start, end, title);
+
+		List<NewsDomain> domains = new ArrayList<>();
+
+		for (int i = 0; i < stories.get().size(); i++) {
+			HackernewsStories story = stories.get().get(i);
+			NewsDomain domain = new NewsDomain();
+			setDomainvalues(domain, Optional.of(story));
+			domains.add(domain);
+		}
+        System.out.print("here1");
 		return Optional.of(domains);
 	}
 

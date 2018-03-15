@@ -25,4 +25,6 @@ public interface HackernewsRepository extends Repository<HackernewsStories, Long
 
 	Optional<List<HackernewsStories>> findByTitleContainingAndScoreGreaterThanAndTimeBetween(String matchingText,
 			Long score, Timestamp start, Timestamp end);
+
+	Optional<List<HackernewsStories>> findByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String tiltle);
 }
