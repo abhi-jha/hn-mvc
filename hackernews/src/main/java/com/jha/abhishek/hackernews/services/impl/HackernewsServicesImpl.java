@@ -162,7 +162,6 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
-        System.out.print("here1");
 		return Optional.of(domains);
 	}
 
