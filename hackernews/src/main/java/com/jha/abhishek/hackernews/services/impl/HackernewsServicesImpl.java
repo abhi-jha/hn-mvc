@@ -31,6 +31,14 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		this.repository = repository;
 	}
 
+	@Override
+	public Optional<NewsDomain> getById(Long id) {
+		Optional<HackernewsStories> story = repository.findById(id);
+		NewsDomain domain = new NewsDomain();
+		setDomainvalues(domain, Optional.of(story.get()));
+		return Optional.of(domain);
+	}
+
 	@Transactional
 	@Override
 	public Optional<List<NewsDomain>> getByTimeBetween(Timestamp start, Timestamp end)

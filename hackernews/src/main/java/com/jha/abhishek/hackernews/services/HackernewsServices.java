@@ -10,12 +10,13 @@ import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 
 public interface HackernewsServices {
+    public Optional<NewsDomain> getById(Long id);
 
-	// Workd for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
+	// Works for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
     public Optional<List<NewsDomain>> getByTimeBetween(Timestamp start, Timestamp end)
             throws NonCriticalException, CriticalException;
 
-    //Workd for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
+    //Works for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
     public Optional<List<NewsDomain>> getByTimeBetweenAndScoreGreaterThan(Timestamp start, Timestamp end, Long score)
             throws NonCriticalException, CriticalException;
 
@@ -32,6 +33,6 @@ public interface HackernewsServices {
 
     public Optional<List<NewsDomainByUser>> getByBy(String by) throws NonCriticalException, CriticalException;
 
-    //Workd for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
+    //Works for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
     public Optional<List<NewsDomain>> getByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String title) throws NonCriticalException, CriticalException;
 }

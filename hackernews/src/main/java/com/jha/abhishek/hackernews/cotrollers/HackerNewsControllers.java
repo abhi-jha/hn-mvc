@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.jha.abhishek.hackernews.domains.NewsDomain;
 import com.jha.abhishek.hackernews.domains.NewsDomainByUser;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
@@ -24,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
+@CrossOrigin
 @RestController
 @Api(value = "Tech news", description = "Tech news link aggregation for better querying", tags = {"Web API Links"})
 @RequestMapping("api/v1/")
@@ -63,6 +61,16 @@ public class HackerNewsControllers {
     public ResponseEntity<?> getStoryByUser(@PathVariable("userId") String userId)
             throws NonCriticalException, CriticalException {
         Optional<List<NewsDomainByUser>> story = hack.getByBy(userId);
+        return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
+    }
+
+    //DON'T LIST THIS ENDPOINT IN THE API DOCS; FIND A WORKAROUND TO AVOID DOING THIS
+    @ApiOperation(value = "Stories by an id", response = NewsDomain.class)
+    @RequestMapping(value = "/match/id/{id}", produces = {"application/json"}, method = RequestMethod.GET)
+    @ApiIgnore
+    public ResponseEntity<?> getStoryByUser(@PathVariable("id") Long id)
+            throws NonCriticalException, CriticalException {
+        Optional<NewsDomain> story = hack.getById(id);
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
