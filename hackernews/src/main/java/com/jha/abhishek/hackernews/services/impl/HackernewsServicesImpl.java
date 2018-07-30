@@ -45,15 +45,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTimeBetween(start, end);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Transactional
@@ -62,15 +54,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 		Optional<List<HackernewsStories>> stories = repository.findByScoreGreaterThan(score);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Override
@@ -79,15 +63,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContaining(matchingText);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Override
@@ -96,15 +72,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		Optional<List<HackernewsStories>> stories = repository.findByTitleContainingAndScoreGreaterThan(matchingText,
 				score);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Override
@@ -129,15 +97,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTimeBetweenAndScoreGreaterThan(start, end, score);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Override
@@ -146,15 +106,7 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		Optional<List<HackernewsStories>> stories = repository
 				.findByTitleContainingAndScoreGreaterThanAndTimeBetween(matchingText, score, start, end);
 
-		List<NewsDomain> domains = new ArrayList<>();
-
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
-		}
-		return Optional.of(domains);
+		return Optional.of(setvalues(stories));
 	}
 
 	@Override
@@ -162,6 +114,10 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			throws NonCriticalException, CriticalException {
 		Optional<List<HackernewsStories>> stories = repository.findByTimeBetweenAndTitleContaining(start, end, title);
 
+		return Optional.of(setvalues(stories));
+	}
+
+	public List<NewsDomain> setvalues(Optional<List<HackernewsStories>> stories){
 		List<NewsDomain> domains = new ArrayList<>();
 
 		for (int i = 0; i < stories.get().size(); i++) {
@@ -170,7 +126,8 @@ public class HackernewsServicesImpl implements HackernewsServices {
 			setDomainvalues(domain, Optional.of(story));
 			domains.add(domain);
 		}
-		return Optional.of(domains);
+
+		return domains;
 	}
 
 	public void setDomainvalues(NewsDomain domain, Optional<HackernewsStories> story) {
