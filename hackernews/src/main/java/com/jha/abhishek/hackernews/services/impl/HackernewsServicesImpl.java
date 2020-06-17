@@ -4,7 +4,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 
+import com.jha.abhishek.hackernews.services.Paginator.Paginate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.repositories.HackernewsRepository;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Link;
 
 @Service
 public class HackernewsServicesImpl implements HackernewsServices {
@@ -138,4 +144,15 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		domain.setUrl(story.get().getUrl());
 	}
 
+	@Override
+	public Map getByDate(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request)
+			throws NonCriticalException, CriticalException {
+		int totalRecords = repository.getNumberOfRecordsForADate(start, end);
+		Link nextLink = Paginate.paginate(offset, limit, totalRecords, request);
+		Optional<List<HackernewsStories>> stories = repository.findByDate(start, end, limit, offset);
+		Map resultMapWithLinkHeader = new HashMap<Link, Object>();
+		resultMapWithLinkHeader.put("link", nextLink);
+		resultMapWithLinkHeader.put("records", Optional.of(setvalues(stories)));
+		return resultMapWithLinkHeader;
+	}
 }

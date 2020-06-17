@@ -2,12 +2,15 @@ package com.jha.abhishek.hackernews.services;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.jha.abhishek.hackernews.domains.NewsDomain;
 import com.jha.abhishek.hackernews.domains.NewsDomainByUser;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface HackernewsServices {
     public Optional<NewsDomain> getById(Long id);
@@ -35,4 +38,7 @@ public interface HackernewsServices {
 
     //Works for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
     public Optional<List<NewsDomain>> getByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String title) throws NonCriticalException, CriticalException;
+
+    public Map getByDate(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request) throws NonCriticalException, CriticalException;
+
 }
