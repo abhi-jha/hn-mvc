@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import com.jha.abhishek.hackernews.entities.HackernewsStories;
 
@@ -27,4 +28,11 @@ public interface HackernewsRepository extends Repository<HackernewsStories, Long
 			Long score, Timestamp start, Timestamp end);
 
 	Optional<List<HackernewsStories>> findByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String tiltle);
+
+	@Query(value="select count(*) from DATA where time between :a and :b", nativeQuery = true)
+	int getNumberOfRecordsForADate(Timestamp a, Timestamp b);
+
+	@Query(value="select * from DATA where time between :a and :b order by score DESC limit :limit offset :offset", nativeQuery = true)
+	Optional<List<HackernewsStories>> findByDate(Timestamp a, Timestamp b, int limit, int offset);
+
 }

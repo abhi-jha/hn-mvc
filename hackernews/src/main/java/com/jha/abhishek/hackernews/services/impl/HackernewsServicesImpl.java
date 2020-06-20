@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
+import com.jha.abhishek.hackernews.services.Paginator.Paginate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.repositories.HackernewsRepository;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class HackernewsServicesImpl implements HackernewsServices {
@@ -120,13 +124,14 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	public List<NewsDomain> setvalues(Optional<List<HackernewsStories>> stories){
 		List<NewsDomain> domains = new ArrayList<>();
 
-		for (int i = 0; i < stories.get().size(); i++) {
-			HackernewsStories story = stories.get().get(i);
-			NewsDomain domain = new NewsDomain();
-			setDomainvalues(domain, Optional.of(story));
-			domains.add(domain);
+		if (stories.isPresent()) {
+			for (int i = 0; i < stories.get().size(); i++) {
+				HackernewsStories story = stories.get().get(i);
+				NewsDomain domain = new NewsDomain();
+				setDomainvalues(domain, Optional.of(story));
+ 				domains.add(domain);
+			}
 		}
-
 		return domains;
 	}
 
@@ -138,4 +143,13 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		domain.setUrl(story.get().getUrl());
 	}
 
+	@Override
+	public Map getByDate(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request)
+			throws NonCriticalException, CriticalException {
+		int totalRecords = repository.getNumberOfRecordsForADate(start, end);
+		Map resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
+		Optional<List<HackernewsStories>> stories = repository.findByDate(start, end, limit, offset);
+		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
+		return resultMapWithLinks;
+	}
 }
