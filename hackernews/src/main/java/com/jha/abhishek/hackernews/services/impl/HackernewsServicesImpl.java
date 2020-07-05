@@ -144,11 +144,20 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	}
 
 	@Override
-	public Map getByDate(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request)
+	public Map<String, Object> getByDatePaginated(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request)
 			throws NonCriticalException, CriticalException {
 		int totalRecords = repository.getNumberOfRecordsForADate(start, end);
-		Map resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
+		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
 		Optional<List<HackernewsStories>> stories = repository.findByDate(start, end, limit, offset);
+		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
+		return resultMapWithLinks;
+	}
+
+	@Override
+	public Map<String, Object> getByAboveScorePaginated(int score, Integer offset, Integer limit, final HttpServletRequest request) {
+		int totalRecords = repository.getNumberOfRecordsForAboveAScore(score);
+		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
+		Optional<List<HackernewsStories>> stories = repository.findByPaginatedAboveAScore(score, limit, offset);
 		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
 		return resultMapWithLinks;
 	}
