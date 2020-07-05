@@ -39,6 +39,7 @@ public interface HackernewsServices {
     //Works for a single day as well if the end Timestamp is within 24 hours of the start Timestamp
     public Optional<List<NewsDomain>> getByTimeBetweenAndTitleContaining(Timestamp start, Timestamp end, String title) throws NonCriticalException, CriticalException;
 
-    public Map getByDate(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request) throws NonCriticalException, CriticalException;
+    public Map<String, Object> getByDatePaginated(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request) throws NonCriticalException, CriticalException;
 
+    public Map<String, Object> getByAboveScorePaginated(int score, Integer offset, Integer limit, final HttpServletRequest request);
 }

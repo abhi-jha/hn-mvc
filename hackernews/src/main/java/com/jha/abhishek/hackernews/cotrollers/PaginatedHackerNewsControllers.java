@@ -21,13 +21,13 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @Api(value = "Tech news", description = "Tech news link aggregation for better querying", tags = {"Paginated API Links"})
-@RequestMapping("api/v1/")
+@RequestMapping("api/v1/paginate")
 public class PaginatedHackerNewsControllers {
     @Autowired
     HackernewsServices hack;
 
     @ApiOperation(value = "Records for a date", response = NewsDomain.class, responseContainer = "List")
-    @RequestMapping(value = "/paginate/date/{date}", produces = {
+    @RequestMapping(value = "/date/{date}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity getPaginatedByToday(
             @PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date,
@@ -38,8 +38,23 @@ public class PaginatedHackerNewsControllers {
             offset = new Integer(0);
         if (limit == null)
             limit = new Integer(10);
-        Map resultMap = hack.getByDate(new Timestamp(date.getTime()),
+        Map resultMap = hack.getByDatePaginated(new Timestamp(date.getTime()),
                 new Timestamp(new Date(date.getTime() + 3600 * 1000 * 24 - 1000).getTime()), offset, limit, request);
+        return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
+    }
+
+    @ApiOperation(value = "Stories having above the score", response = NewsDomain.class, responseContainer = "List")
+    @RequestMapping(value = "/score/{score}", produces = {"application/json"}, method = RequestMethod.GET)
+    public ResponseEntity<?> getStoryForScore(@PathVariable("score") int score,
+                                              @QueryParam("offset") Integer offset,
+                                              @QueryParam("limit") Integer limit,
+                                              final HttpServletRequest request)
+            throws NonCriticalException, CriticalException {
+        if (offset == null)
+            offset = new Integer(0);
+        if (limit == null)
+            limit = new Integer(10);
+        Map resultMap = hack.getByAboveScorePaginated(score, offset, limit, request);
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
 }

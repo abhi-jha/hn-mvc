@@ -35,4 +35,10 @@ public interface HackernewsRepository extends Repository<HackernewsStories, Long
 	@Query(value="select * from DATA where time between :a and :b order by score DESC limit :limit offset :offset", nativeQuery = true)
 	Optional<List<HackernewsStories>> findByDate(Timestamp a, Timestamp b, int limit, int offset);
 
+	@Query(value="select count(*) from DATA where score >= :score", nativeQuery = true)
+	int getNumberOfRecordsForAboveAScore(int score);
+
+	@Query(value="select * from DATA where score >= :score order by score DESC limit :limit offset :offset", nativeQuery = true)
+	Optional<List<HackernewsStories>> findByPaginatedAboveAScore(int score, int limit, int offset);
+
 }
