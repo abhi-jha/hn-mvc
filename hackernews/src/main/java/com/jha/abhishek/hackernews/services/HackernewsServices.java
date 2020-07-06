@@ -42,4 +42,6 @@ public interface HackernewsServices {
     public Map<String, Object> getByDatePaginated(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request) throws NonCriticalException, CriticalException;
 
     public Map<String, Object> getByAboveScorePaginated(int score, Integer offset, Integer limit, final HttpServletRequest request);
+
+    public Map<String, Object> getByPaginatedForTextMatch(String text, Integer offset, Integer limit, final HttpServletRequest request);
 }

@@ -161,4 +161,13 @@ public class HackernewsServicesImpl implements HackernewsServices {
 		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
 		return resultMapWithLinks;
 	}
+
+	@Override
+	public Map<String, Object> getByPaginatedForTextMatch(String text, Integer offset, Integer limit, HttpServletRequest request) {
+		int totalRecords = repository.getNumberOfRecordsForTextMatch(text);
+		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
+		Optional<List<HackernewsStories>> stories = repository.findByPaginatedForTextMatch(text, limit, offset);
+		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
+		return resultMapWithLinks;
+	}
 }
