@@ -41,4 +41,9 @@ public interface HackernewsRepository extends Repository<HackernewsStories, Long
 	@Query(value="select * from DATA where score >= :score order by score DESC limit :limit offset :offset", nativeQuery = true)
 	Optional<List<HackernewsStories>> findByPaginatedAboveAScore(int score, int limit, int offset);
 
+	@Query(value="select count(*) from DATA where title like %:text%", nativeQuery = true)
+	int getNumberOfRecordsForTextMatch(String text);
+
+	@Query(value="select * from DATA where title like %:text% order by score DESC limit :limit offset :offset", nativeQuery = true)
+	Optional<List<HackernewsStories>> findByPaginatedForTextMatch(String text, int limit, int offset);
 }

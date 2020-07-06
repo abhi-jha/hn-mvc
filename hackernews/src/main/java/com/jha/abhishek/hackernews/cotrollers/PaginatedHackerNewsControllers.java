@@ -57,4 +57,19 @@ public class PaginatedHackerNewsControllers {
         Map resultMap = hack.getByAboveScorePaginated(score, offset, limit, request);
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
+
+    @ApiOperation(value = "Stories containing a string", response = NewsDomain.class, responseContainer = "List")
+    @RequestMapping(value = "/match/{matchingText}", produces = {"application/json"}, method = RequestMethod.GET)
+    public ResponseEntity<?> getStoryForMatchingText(@PathVariable("matchingText") String text,
+                                                     @QueryParam("offset") Integer offset,
+                                                     @QueryParam("limit") Integer limit,
+                                                     final HttpServletRequest request)
+            throws NonCriticalException, CriticalException {
+        if (offset == null)
+            offset = new Integer(0);
+        if (limit == null)
+            limit = new Integer(10);
+        Map resultMap = hack.getByPaginatedForTextMatch(text, offset, limit, request);
+        return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
+    }
 }
