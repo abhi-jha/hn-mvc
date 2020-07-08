@@ -37,7 +37,7 @@ public class PaginatedHackerNewsControllers {
         if (offset == null)
             offset = new Integer(0);
         if (limit == null)
-            limit = new Integer(10);
+            limit = new Integer(20);
         Map resultMap = hack.getByDatePaginated(new Timestamp(date.getTime()),
                 new Timestamp(new Date(date.getTime() + 3600 * 1000 * 24 - 1000).getTime()), offset, limit, request);
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
@@ -53,7 +53,7 @@ public class PaginatedHackerNewsControllers {
         if (offset == null)
             offset = new Integer(0);
         if (limit == null)
-            limit = new Integer(10);
+            limit = new Integer(20);
         Map resultMap = hack.getByAboveScorePaginated(score, offset, limit, request);
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
@@ -68,7 +68,7 @@ public class PaginatedHackerNewsControllers {
         if (offset == null)
             offset = new Integer(0);
         if (limit == null)
-            limit = new Integer(10);
+            limit = new Integer(20);
         Map resultMap = hack.getByPaginatedForTextMatch(text, offset, limit, request);
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
