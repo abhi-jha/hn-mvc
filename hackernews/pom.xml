@@ -126,6 +126,74 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>4.0.0</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+					<execution>
+						<id>validate-the-git-infos</id>
+						<goals>
+							<goal>validateRevision</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+					<prefix>git</prefix>
+					<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+					<dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+					<verbose>false</verbose>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+					<format>properties</format>
+					<skipPoms>true</skipPoms>
+					<injectAllReactorProjects>false</injectAllReactorProjects>
+					<failOnNoGitDirectory>true</failOnNoGitDirectory>
+					<failOnUnableToExtractRepoInfo>true</failOnUnableToExtractRepoInfo>
+					<skip>false</skip>
+					<offline>false</offline>
+					<runOnlyOnce>false</runOnlyOnce>
+					<excludeProperties>
+						<excludeProperty>git.local.*</excludeProperty>
+						<excludeProperty>git.commit.user.email</excludeProperty>
+						<excludeProperty>git.build.user.email</excludeProperty>
+						<excludeProperty>git.total.*</excludeProperty>
+						<excludeProperty>git.closest.*</excludeProperty>
+						<excludeProperty>git.commit.id.describe*</excludeProperty>
+						<!-- <excludeProperty>git.commit.id.abbrev</excludeProperty> -->
+						<excludeProperty>git.commit.message.short</excludeProperty>
+						<excludeProperty>git.build.host</excludeProperty>
+					</excludeProperties>
+					<includeOnlyProperties>
+						<!-- <includeOnlyProperty>^git.commit.id.full$</includeOnlyProperty> -->
+					</includeOnlyProperties>
+					<useNativeGit>false</useNativeGit>
+					<nativeGitTimeoutInMs>30000</nativeGitTimeoutInMs>
+					<abbrevLength>7</abbrevLength>
+					<commitIdGenerationMode>flat</commitIdGenerationMode>
+					<gitDescribe>
+						<skip>false</skip>
+						<always>true</always>
+						<abbrev>7</abbrev>
+						<dirty>-dirty</dirty>
+						<match>*</match>
+						<tags>false</tags>
+						<forceLongFormat>false</forceLongFormat>
+					</gitDescribe>
+					<evaluateOnCommit>HEAD</evaluateOnCommit>
+					<useBranchNameFromBuildEnvironment>true</useBranchNameFromBuildEnvironment>
+					<injectIntoSysProperties>true</injectIntoSysProperties>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
