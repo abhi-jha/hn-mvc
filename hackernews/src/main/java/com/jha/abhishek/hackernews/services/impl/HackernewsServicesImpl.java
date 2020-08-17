@@ -146,7 +146,10 @@ public class HackernewsServicesImpl implements HackernewsServices {
 	@Override
 	public Map<String, Object> getByDatePaginated(Timestamp start, Timestamp end, Integer offset, Integer limit, final HttpServletRequest request)
 			throws NonCriticalException, CriticalException {
+		long start1 = System.nanoTime();
 		int totalRecords = repository.getNumberOfRecordsForADate(start, end);
+		long diff = System.nanoTime() - start1;
+		                                System.out.println("Time taken ByDate in ns is : " +  diff);
 		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
 		Optional<List<HackernewsStories>> stories = repository.findByDate(start, end, limit, offset);
 		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
@@ -155,7 +158,10 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Override
 	public Map<String, Object> getByAboveScorePaginated(int score, Integer offset, Integer limit, final HttpServletRequest request) {
+		long start = System.nanoTime();
 		int totalRecords = repository.getNumberOfRecordsForAboveAScore(score);
+		long diff = System.nanoTime() - start;
+		                System.out.println("Time taken ByScore in ns is : " +  diff);
 		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
 		Optional<List<HackernewsStories>> stories = repository.findByPaginatedAboveAScore(score, limit, offset);
 		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
@@ -164,8 +170,11 @@ public class HackernewsServicesImpl implements HackernewsServices {
 
 	@Override
 	public Map<String, Object> getByPaginatedForTextMatch(String text, Integer offset, Integer limit, HttpServletRequest request) {
+		long start = System.nanoTime();
 		int totalRecords = repository.getNumberOfRecordsForTextMatch(text);
-		Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
+		long diff = System.nanoTime() - start;
+	        System.out.println("Time taken ByText in ns is : " +  diff);
+	 	Map<String, Object> resultMapWithLinks = Paginate.paginate(offset, limit, totalRecords, request);
 		Optional<List<HackernewsStories>> stories = repository.findByPaginatedForTextMatch(text, limit, offset);
 		resultMapWithLinks.put("records", Optional.of(setvalues(stories)));
 		return resultMapWithLinks;
