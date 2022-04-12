@@ -1,4 +1,4 @@
-package com.jha.abhishek.hackernews.cotrollers;
+package com.jha.abhishek.hackernews.controllers;
 
 import com.jha.abhishek.hackernews.Utils.Utils;
 import com.jha.abhishek.hackernews.domains.NewsDomain;

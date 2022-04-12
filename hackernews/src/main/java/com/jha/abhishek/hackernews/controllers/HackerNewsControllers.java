@@ -1,4 +1,4 @@
-package com.jha.abhishek.hackernews.cotrollers;
+package com.jha.abhishek.hackernews.controllers;
 
 import java.util.Date;
 import java.sql.Timestamp;
