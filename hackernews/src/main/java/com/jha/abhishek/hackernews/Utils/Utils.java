@@ -2,7 +2,7 @@ package com.jha.abhishek.hackernews.Utils;
 
 import org.springframework.http.HttpHeaders;
 
-import javax.ws.rs.core.Link;
+import jakarta.ws.rs.core.Link;
 import java.util.Map;
 
 public class Utils {

@@ -10,7 +10,7 @@ import com.jha.abhishek.hackernews.domains.NewsDomainByUser;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface HackernewsServices {
     public Optional<NewsDomain> getById(Long id);

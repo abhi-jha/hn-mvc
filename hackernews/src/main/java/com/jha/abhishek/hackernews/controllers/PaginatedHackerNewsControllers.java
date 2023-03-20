@@ -5,28 +5,37 @@ import com.jha.abhishek.hackernews.domains.NewsDomain;
 import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.QueryParam;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.QueryParam;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
 @CrossOrigin
 @RestController
-@Api(value = "Tech news", description = "Tech news link aggregation for better querying", tags = {"Paginated API Links"})
+@Tag(name = "Paginated Tech news", description = "Tech news link aggregation for better querying")
 @RequestMapping("api/v1/paginate")
 public class PaginatedHackerNewsControllers {
+    private static final String OK_MSG = "SUCCESSFULLY OPERATION";
     @Autowired
     HackernewsServices hack;
 
-    @ApiOperation(value = "Records for a date", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Records for a date",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{date}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity getPaginatedByToday(
@@ -43,7 +52,11 @@ public class PaginatedHackerNewsControllers {
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
 
-    @ApiOperation(value = "Stories having above the score", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories having above the score",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/score/{score}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryForScore(@PathVariable("score") int score,
                                               @QueryParam("offset") Integer offset,
@@ -58,7 +71,12 @@ public class PaginatedHackerNewsControllers {
         return ResponseEntity.ok().headers(Utils.getHeaders(resultMap)).body(resultMap.get("records"));
     }
 
-    @ApiOperation(value = "Stories containing a string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories containing a string",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
+
     @RequestMapping(value = "/match/{matchingText}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryForMatchingText(@PathVariable("matchingText") String text,
                                                      @QueryParam("offset") Integer offset,

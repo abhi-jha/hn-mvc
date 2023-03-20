@@ -6,6 +6,12 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -17,19 +23,21 @@ import com.jha.abhishek.hackernews.exceptionhandling.CriticalException;
 import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
-
 @CrossOrigin
 @RestController
-@Api(value = "Tech news", description = "Tech news link aggregation for better querying", tags = {"Web API Links"})
+@Tag(name = "Tech news", description = "Tech news link aggregation for better querying")
 @RequestMapping("api/v1/")
 public class HackerNewsControllers {
     @Autowired
     HackernewsServices hack;
 
-    @ApiOperation(value = "Stories having above the score", response = NewsDomain.class, responseContainer = "List")
+    private static final String OK_MSG = "SUCCESSFUL OPERATION.";
+
+    @Operation(description = "Stories having above the score",
+            responses = {
+            @ApiResponse(responseCode = "200", description = OK_MSG,
+                    content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+    })
     @RequestMapping(value = "/score/{score}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryForScore(@PathVariable("score") Long score)
             throws NonCriticalException, CriticalException {
@@ -37,7 +45,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories containing a string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories containing a string",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = OK_MSG,
+                            content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+            })
     @RequestMapping(value = "/match/{matchingText}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryforMatchingText(@PathVariable("matchingText") String matchingText)
             throws NonCriticalException, CriticalException {
@@ -45,7 +57,14 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories where they all contain a string and above a score", response = NewsDomain.class, responseContainer = "List")
+//    @Operation(description = , responses = {@ApiResponse(responseCode = "200", description = OK_MSG,
+//        content = @Content(schema = @Schema(implementation = NewsDomain.class)))})
+
+    @Operation(description = "Stories where they all contain a string and above a score",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = OK_MSG,
+                            content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+            })
     @RequestMapping(value = "/match/{matchingText}/score/{score}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryforMatchingTextAndScoreGreater(@PathVariable("matchingText") String matchingText,
@@ -55,26 +74,36 @@ public class HackerNewsControllers {
     }
 
     //DON'T LIST THIS ENDPOINT IN THE API DOCS; FIND A WORKAROUND TO AVOID DOING THIS
-    @ApiOperation(value = "Stories by a user", response = NewsDomainByUser.class, responseContainer = "List")
+    @Operation(description = "Stories by a user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = OK_MSG,
+                            content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomainByUser.class))))
+            })
     @RequestMapping(value = "/match/user/{userId}", produces = {"application/json"}, method = RequestMethod.GET)
-    @ApiIgnore
+//    @Hidden
     public ResponseEntity<?> getStoryByUser(@PathVariable("userId") String userId)
             throws NonCriticalException, CriticalException {
         Optional<List<NewsDomainByUser>> story = hack.getByBy(userId);
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    //DON'T LIST THIS ENDPOINT IN THE API DOCS; FIND A WORKAROUND TO AVOID DOING THIS
-    @ApiOperation(value = "Stories by an id", response = NewsDomain.class)
+    @Operation(description = "Stories by an id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = OK_MSG,
+                            content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+            })
     @RequestMapping(value = "/match/id/{id}", produces = {"application/json"}, method = RequestMethod.GET)
-    @ApiIgnore
     public ResponseEntity<?> getStoryByUser(@PathVariable("id") Long id)
             throws NonCriticalException, CriticalException {
         Optional<NewsDomain> story = hack.getById(id);
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories for a date(ddMMyyyy)", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories for a date(ddMMyyyy)",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{date}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryByADay(@PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date)
             throws NonCriticalException, CriticalException {
@@ -83,7 +112,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories between dates(ddMMyyyy)", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories between dates(ddMMyyyy)",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{start}/{end}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryBetweenATimePeriod(
             @PathVariable("start") @DateTimeFormat(pattern = "ddMMyyyy") Date startDate,
@@ -94,7 +127,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories for a date(ddMMyyyy) and above a score", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories for a date(ddMMyyyy) and above a score",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{date}/score/{score}", produces = {"application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryByADayAndMinimumScore(
             @PathVariable("date") @DateTimeFormat(pattern = "ddMMyyyy") Date date, @PathVariable("score") Long score)
@@ -104,7 +141,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories between dates(ddMMyyyy) and above a score", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories between dates(ddMMyyyy) and above a score",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{start}/{end}/score/{score}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryBetweenATimePeriodAndMinimumScore(
@@ -116,7 +157,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories for a date(ddMMyyyy), above a score and matching string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories for a date(ddMMyyyy), above a score and matching string",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{date}/score/{score}/match/{matchingText}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryByADayAndMinimumScoreAndmatchingText(
@@ -128,7 +173,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories between dates(ddMMyyyy), above a score and a matching string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories between dates(ddMMyyyy), above a score and a matching string",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{start}/{end}/score/{score}/match/{matchingText}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryBetweenTimeAndMinimumScoreAndMatchingText(
@@ -140,7 +189,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories for a date(ddMMyyyy) and a matching string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories for a date(ddMMyyyy) and a matching string",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{date}/match/{matchingText}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryForADayAndMatchingText(
@@ -151,7 +204,11 @@ public class HackerNewsControllers {
         return new ResponseEntity<>(story.isPresent() ? story.get() : Optional.empty(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Stories between dates(ddMMyyyy) and a matching string", response = NewsDomain.class, responseContainer = "List")
+    @Operation(description = "Stories between dates(ddMMyyyy) and a matching string",
+        responses = {
+                @ApiResponse(responseCode = "200", description = OK_MSG,
+                        content = @Content(array = @ArraySchema(uniqueItems = false,schema = @Schema(implementation = NewsDomain.class))))
+        })
     @RequestMapping(value = "/date/{start}/{end}/match/{matchingText}", produces = {
             "application/json"}, method = RequestMethod.GET)
     public ResponseEntity<?> getStoryForADayAndMatchingText(

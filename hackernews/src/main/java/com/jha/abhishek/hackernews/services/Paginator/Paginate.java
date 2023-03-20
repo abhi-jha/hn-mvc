@@ -1,7 +1,7 @@
 package com.jha.abhishek.hackernews.services.Paginator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Link;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.core.Link;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;

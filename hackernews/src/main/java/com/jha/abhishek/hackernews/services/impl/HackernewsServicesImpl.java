@@ -21,7 +21,7 @@ import com.jha.abhishek.hackernews.exceptionhandling.NonCriticalException;
 import com.jha.abhishek.hackernews.repositories.HackernewsRepository;
 import com.jha.abhishek.hackernews.services.HackernewsServices;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class HackernewsServicesImpl implements HackernewsServices {
